@@ -28,6 +28,7 @@ interface Quest {
   progress: number;
   target: number;
   completed: boolean;
+  type?: 'time' | 'chat' | 'purchase' | 'balance';
 }
 
 interface ChatMessage {
@@ -44,17 +45,23 @@ interface User {
   activeTitle: string | null;
   timeSpent: number;
   isAdmin: boolean;
+  messageCount: number;
 }
 
 const TITLES: Title[] = [
-  { id: '1', name: '⚔️ Новичок', price: 0, rarity: 'common', description: 'Начальный титул для всех игроков' },
-  { id: '2', name: '🔥 Воин', price: 100, rarity: 'common', description: 'Путь воина начинается здесь' },
-  { id: '3', name: '⚡ Громовержец', price: 500, rarity: 'rare', description: 'Повелитель молний' },
-  { id: '4', name: '🌟 Легенда', price: 1000, rarity: 'epic', description: 'Легендарный статус' },
-  { id: '5', name: '👑 Король Киберпанка', price: 5000, rarity: 'legendary', description: 'Абсолютная власть в цифровом мире' },
-  { id: '6', name: '💎 Коллекционер', price: 750, rarity: 'rare', description: 'Собиратель редкостей' },
-  { id: '7', name: '🎯 Снайпер', price: 300, rarity: 'common', description: 'Точность превыше всего' },
-  { id: '8', name: '🚀 Киберпилот', price: 2000, rarity: 'epic', description: 'Покоритель цифровых просторов' },
+  { id: '1', name: '[NEWBIE]', price: 0, rarity: 'common', description: 'Starting title for all players' },
+  { id: '2', name: '[VIP]', price: 500, rarity: 'rare', description: 'Very Important Player status' },
+  { id: '3', name: '[ADMIN]', price: 2000, rarity: 'epic', description: 'Administrator authority' },
+  { id: '4', name: '[SNIPER]', price: 800, rarity: 'rare', description: 'Precision and accuracy' },
+  { id: '5', name: '[LEGEND]', price: 3000, rarity: 'epic', description: 'Legendary warrior status' },
+  { id: '6', name: '[KING]', price: 10000, rarity: 'legendary', description: 'Ultimate royal power' },
+  { id: '7', name: '[TASK-MASTER]', price: 1500, rarity: 'epic', description: 'Master of all quests' },
+  { id: '8', name: '[CHEATER]', price: 5000, rarity: 'legendary', description: 'Breaking all the rules' },
+  { id: '9', name: '[CREATOR]', price: 4000, rarity: 'epic', description: 'Content creator elite' },
+  { id: '10', name: '[COLLAB]', price: 1200, rarity: 'rare', description: 'Collaboration specialist' },
+  { id: '11', name: '[SAF ADMIN]', price: 7500, rarity: 'legendary', description: 'SAF Administration' },
+  { id: '12', name: '[SAT ADMIN]', price: 8000, rarity: 'legendary', description: 'SAT Administration' },
+  { id: '13', name: '[TROLLER]', price: 2500, rarity: 'epic', description: 'Master of trolling' },
 ];
 
 const rarityColors = {
@@ -79,36 +86,36 @@ export default function Index() {
     activeTitle: '1',
     timeSpent: 0,
     isAdmin: false,
+    messageCount: 0,
   });
 
   const [quests, setQuests] = useState<Quest[]>([
-    {
-      id: 'q1',
-      name: 'Первые шаги',
-      description: 'Проведите 1 минуту на сайте',
-      reward: 50,
-      progress: 0,
-      target: 60,
-      completed: false,
-    },
-    {
-      id: 'q2',
-      name: 'Путь воина',
-      description: 'Проведите 5 минут на сайте',
-      reward: 200,
-      progress: 0,
-      target: 300,
-      completed: false,
-    },
-    {
-      id: 'q3',
-      name: 'Мастер времени',
-      description: 'Проведите 15 минут на сайте',
-      reward: 1000,
-      progress: 0,
-      target: 900,
-      completed: false,
-    },
+    { id: 'q1', name: 'Первые шаги', description: 'Проведите 30 секунд на сайте', reward: 25, progress: 0, target: 30, completed: false, type: 'time' },
+    { id: 'q2', name: 'Новичок', description: 'Проведите 1 минуту на сайте', reward: 50, progress: 0, target: 60, completed: false, type: 'time' },
+    { id: 'q3', name: 'Исследователь', description: 'Проведите 2 минуты на сайте', reward: 75, progress: 0, target: 120, completed: false, type: 'time' },
+    { id: 'q4', name: 'Активный игрок', description: 'Проведите 3 минуты на сайте', reward: 100, progress: 0, target: 180, completed: false, type: 'time' },
+    { id: 'q5', name: 'Ветеран', description: 'Проведите 5 минут на сайте', reward: 200, progress: 0, target: 300, completed: false, type: 'time' },
+    { id: 'q6', name: 'Постоянный гость', description: 'Проведите 7 минут на сайте', reward: 300, progress: 0, target: 420, completed: false, type: 'time' },
+    { id: 'q7', name: 'Преданный', description: 'Проведите 10 минут на сайте', reward: 500, progress: 0, target: 600, completed: false, type: 'time' },
+    { id: 'q8', name: 'Мастер времени', description: 'Проведите 15 минут на сайте', reward: 1000, progress: 0, target: 900, completed: false, type: 'time' },
+    { id: 'q9', name: 'Покоритель', description: 'Проведите 20 минут на сайте', reward: 1500, progress: 0, target: 1200, completed: false, type: 'time' },
+    { id: 'q10', name: 'Легенда', description: 'Проведите 30 минут на сайте', reward: 2500, progress: 0, target: 1800, completed: false, type: 'time' },
+    { id: 'q11', name: 'Титан', description: 'Проведите 45 минут на сайте', reward: 4000, progress: 0, target: 2700, completed: false, type: 'time' },
+    { id: 'q12', name: 'Бог времени', description: 'Проведите 1 час на сайте', reward: 6000, progress: 0, target: 3600, completed: false, type: 'time' },
+    { id: 'q13', name: 'Чемпион', description: 'Проведите 1.5 часа на сайте', reward: 8000, progress: 0, target: 5400, completed: false, type: 'time' },
+    { id: 'q14', name: 'Несокрушимый', description: 'Проведите 2 часа на сайте', reward: 10000, progress: 0, target: 7200, completed: false, type: 'time' },
+    { id: 'q15', name: 'Король времени', description: 'Проведите 3 часа на сайте', reward: 15000, progress: 0, target: 10800, completed: false, type: 'time' },
+    { id: 'q16', name: 'Болтун', description: 'Отправьте 5 сообщений в чат', reward: 100, progress: 0, target: 5, completed: false, type: 'chat' },
+    { id: 'q17', name: 'Общительный', description: 'Отправьте 10 сообщений в чат', reward: 200, progress: 0, target: 10, completed: false, type: 'chat' },
+    { id: 'q18', name: 'Говорун', description: 'Отправьте 25 сообщений в чат', reward: 500, progress: 0, target: 25, completed: false, type: 'chat' },
+    { id: 'q19', name: 'Спамер', description: 'Отправьте 50 сообщений в чат', reward: 1000, progress: 0, target: 50, completed: false, type: 'chat' },
+    { id: 'q20', name: 'Чат-монстр', description: 'Отправьте 100 сообщений в чат', reward: 2000, progress: 0, target: 100, completed: false, type: 'chat' },
+    { id: 'q21', name: 'Коллекционер', description: 'Купите 3 титула', reward: 500, progress: 0, target: 3, completed: false, type: 'purchase' },
+    { id: 'q22', name: 'Собиратель', description: 'Купите 5 титулов', reward: 1000, progress: 0, target: 5, completed: false, type: 'purchase' },
+    { id: 'q23', name: 'Охотник за титулами', description: 'Купите 8 титулов', reward: 2000, progress: 0, target: 8, completed: false, type: 'purchase' },
+    { id: 'q24', name: 'Владелец всего', description: 'Купите все титулы', reward: 5000, progress: 0, target: 13, completed: false, type: 'purchase' },
+    { id: 'q25', name: 'Богач', description: 'Накопите 5000 ТитулКоинов', reward: 500, progress: 0, target: 5000, completed: false, type: 'balance' },
+    { id: 'q26', name: 'Миллионер', description: 'Накопите 10000 ТитулКоинов', reward: 1000, progress: 0, target: 10000, completed: false, type: 'balance' },
   ]);
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
@@ -133,7 +140,7 @@ export default function Index() {
       });
 
       setQuests(prev => prev.map(quest => {
-        if (quest.completed) return quest;
+        if (quest.completed || quest.type !== 'time') return quest;
         const newProgress = Math.min(quest.progress + 1, quest.target);
         const isCompleted = newProgress >= quest.target;
         
@@ -151,6 +158,29 @@ export default function Index() {
 
     return () => clearInterval(interval);
   }, [isLoggedIn, toast]);
+
+  // Balance quest tracking
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    setQuests(prev => prev.map(quest => {
+      if (quest.completed || quest.type !== 'balance') return quest;
+      const newProgress = user.balance;
+      const isCompleted = newProgress >= quest.target;
+      
+      if (isCompleted && !quest.completed) {
+        toast({
+          title: '🎉 Задание выполнено!',
+          description: `Получено ${quest.reward} ТитулКоинов за "${quest.name}"`,
+        });
+        setTimeout(() => {
+          setUser(u => ({ ...u, balance: u.balance + quest.reward }));
+        }, 100);
+      }
+
+      return { ...quest, progress: newProgress, completed: isCompleted };
+    }));
+  }, [user.balance, isLoggedIn, toast]);
 
   // Auto-scroll chat
   useEffect(() => {
@@ -188,6 +218,7 @@ export default function Index() {
         activeTitle: '1',
         timeSpent: 0,
         isAdmin: username === 'admin',
+        messageCount: 0,
       };
 
       savedUsers[username] = { password, ...newUser };
@@ -212,7 +243,7 @@ export default function Index() {
         return;
       }
 
-      setUser(savedUser);
+      setUser({ ...savedUser, messageCount: savedUser.messageCount || 0 });
       setIsLoggedIn(true);
       setShowAuthDialog(false);
       
@@ -239,6 +270,7 @@ export default function Index() {
       activeTitle: '1',
       timeSpent: 0,
       isAdmin: false,
+      messageCount: 0,
     });
 
     toast({
@@ -288,6 +320,24 @@ export default function Index() {
       activeTitle: selectedTitle.id,
     }));
 
+    setQuests(prev => prev.map(quest => {
+      if (quest.completed || quest.type !== 'purchase') return quest;
+      const newProgress = user.ownedTitles.length + 1;
+      const isCompleted = newProgress >= quest.target;
+      
+      if (isCompleted && !quest.completed) {
+        setTimeout(() => {
+          setUser(u => ({ ...u, balance: u.balance + quest.reward }));
+          toast({
+            title: '🎉 Задание выполнено!',
+            description: `Получено ${quest.reward} ТитулКоинов за "${quest.name}"`,
+          });
+        }, 500);
+      }
+
+      return { ...quest, progress: newProgress, completed: isCompleted };
+    }));
+
     toast({
       title: '🎊 Покупка завершена!',
       description: `Титул "${selectedTitle.name}" теперь ваш!`,
@@ -320,6 +370,29 @@ export default function Index() {
 
     setChatMessages(prev => [...prev, newMessage]);
     setChatInput('');
+
+    setUser(prev => {
+      const newMessageCount = prev.messageCount + 1;
+      return { ...prev, messageCount: newMessageCount };
+    });
+
+    setQuests(prev => prev.map(quest => {
+      if (quest.completed || quest.type !== 'chat') return quest;
+      const newProgress = user.messageCount + 1;
+      const isCompleted = newProgress >= quest.target;
+      
+      if (isCompleted && !quest.completed) {
+        setTimeout(() => {
+          setUser(u => ({ ...u, balance: u.balance + quest.reward }));
+          toast({
+            title: '🎉 Задание выполнено!',
+            description: `Получено ${quest.reward} ТитулКоинов за "${quest.name}"`,
+          });
+        }, 500);
+      }
+
+      return { ...quest, progress: newProgress, completed: isCompleted };
+    }));
   };
 
   const handleAdminGiveCoins = () => {
@@ -370,7 +443,7 @@ export default function Index() {
         <Card className="w-full max-w-md neon-border">
           <CardHeader className="text-center">
             <CardTitle className="text-4xl font-bold neon-glow mb-2">
-              🎮 CYBERVERSE
+              🐔 ЧИКЕНТИТУЛ
             </CardTitle>
             <CardDescription className="text-lg">
               Платформа титулов и достижений
@@ -419,7 +492,7 @@ export default function Index() {
       {/* Header */}
       <header className="border-b border-border/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-3xl font-bold neon-glow">🎮 CYBERVERSE</h1>
+          <h1 className="text-3xl font-bold neon-glow">🐔 ЧИКЕНТИТУЛ</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-card px-4 py-2 rounded-lg neon-border">
               <Icon name="Coins" className="text-primary" />
@@ -521,15 +594,16 @@ export default function Index() {
                     key={title.id}
                     className={`cursor-pointer transition-all hover:scale-105 ${
                       rarityColors[title.rarity]
-                    } ${active ? 'ring-2 ring-primary' : ''} border-2`}
+                    } ${active ? 'ring-2 ring-primary' : ''} border-2 ${!owned ? 'select-none' : ''}`}
                     onClick={() => handleTitleClick(title)}
+                    style={{ userSelect: owned ? 'auto' : 'none', WebkitUserSelect: owned ? 'auto' : 'none' }}
                   >
                     <CardHeader>
                       <CardTitle className="text-2xl flex items-center justify-between">
-                        <span>{title.name}</span>
+                        <span className={!owned ? 'blur-sm pointer-events-none' : ''}>{title.name}</span>
                         {owned && <Icon name="Check" className="text-green-500" />}
                       </CardTitle>
-                      <CardDescription>{title.description}</CardDescription>
+                      <CardDescription className={!owned ? 'select-none' : ''}>{title.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center justify-between">
@@ -561,34 +635,41 @@ export default function Index() {
                   Ваш прогресс
                 </CardTitle>
                 <CardDescription>
-                  Время на сайте: {formatTime(user.timeSpent)}
+                  Время на сайте: {formatTime(user.timeSpent)} • Сообщений: {user.messageCount} • Титулов куплено: {user.ownedTitles.length}
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            {quests.map(quest => (
-              <Card key={quest.id} className={quest.completed ? 'opacity-60' : ''}>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span>{quest.name}</span>
-                    {quest.completed && <Icon name="CheckCircle2" className="text-green-500" />}
-                  </CardTitle>
-                  <CardDescription>{quest.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Progress value={(quest.progress / quest.target) * 100} className="h-3" />
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">
-                      {formatTime(quest.progress)} / {formatTime(quest.target)}
-                    </span>
-                    <div className="flex items-center gap-1 font-bold text-primary">
-                      <Icon name="Coins" className="h-4 w-4" />
-                      <span>+{quest.reward}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            <ScrollArea className="h-[600px] pr-4">
+              <div className="space-y-4">
+                {quests.map(quest => (
+                  <Card key={quest.id} className={quest.completed ? 'opacity-60' : ''}>
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between">
+                        <span>{quest.name}</span>
+                        {quest.completed && <Icon name="CheckCircle2" className="text-green-500" />}
+                      </CardTitle>
+                      <CardDescription>{quest.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <Progress value={(quest.progress / quest.target) * 100} className="h-3" />
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">
+                          {quest.type === 'time' && `${formatTime(quest.progress)} / ${formatTime(quest.target)}`}
+                          {quest.type === 'chat' && `${quest.progress} / ${quest.target} сообщений`}
+                          {quest.type === 'purchase' && `${quest.progress} / ${quest.target} титулов`}
+                          {quest.type === 'balance' && `${quest.progress} / ${quest.target} монет`}
+                        </span>
+                        <div className="flex items-center gap-1 font-bold text-primary">
+                          <Icon name="Coins" className="h-4 w-4" />
+                          <span>+{quest.reward}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </ScrollArea>
           </TabsContent>
 
           {/* Chat Tab */}
